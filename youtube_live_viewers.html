@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>YouTube Live Viewers</title>
+    <style>
+        body {{
+            background-color: #000;
+            color: #0f0;
+            font-family: monospace;
+            font-size: 48px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }}
+    </style>
+</head>
+<body>
+    <div id="viewerCount">Loading...</div>
+
+    <script>
+        const API_KEY = "AIzaSyC1qLfXqe0cJkN9CN_fAK4z94ZL_qrF0U4"; // DEMO 用金鑰（每日用量有限）
+        const VIDEO_ID = "-DpI0NLEz04";
+
+        async function fetchViewers() {{
+            try {{
+                const response = await fetch(
+                    `https://www.googleapis.com/youtube/v3/videos?part=liveStreamingDetails&id=${{VIDEO_ID}}&key=${{API_KEY}}`
+                );
+                const data = await response.json();
+                const viewers = data.items[0].liveStreamingDetails.concurrentViewers;
+                document.getElementById("viewerCount").textContent = `👁 ${viewers}`;
+            }} catch (error) {{
+                document.getElementById("viewerCount").textContent = "Error loading";
+                console.error(error);
+            }}
+        }}
+
+        fetchViewers();
+        setInterval(fetchViewers, 30000); // 每30秒更新一次
+    </script>
+</body>
+</html>
